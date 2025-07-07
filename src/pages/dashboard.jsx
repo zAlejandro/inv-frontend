@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getToken, getUser, isLoggedIn, removeSession } from "../auth/auth";
 import { useNavigate } from "react-router-dom";
+import { mensaje } from "../api/auth";
 
 export default function Dashboard(){
     const navigate = useNavigate();
