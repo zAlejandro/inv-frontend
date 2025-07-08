@@ -15,7 +15,8 @@ export default function Dashboard(){
 
     return(
         <div>
-            <h1>Bienvenido {user?.name || "usuario"}!</h1>
+            <h1>Bienvenido</h1>
+            <h2>{user?.name || "usuario"}</h2>
             <button onClick={logout}>Cerrar Sesión</button>
         </div>
     )
