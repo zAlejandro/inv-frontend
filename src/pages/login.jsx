@@ -17,7 +17,7 @@ export default function Login(){
 
         try {
             const res = await login(email, password);
-            const { token } = res.data;
+            const { token, refreshToken } = res.data;
 
             const payload = JSON.parse(atob(token.split(".")[1]));
 
@@ -28,7 +28,7 @@ export default function Login(){
                 name: payload.name
             };
 
-            setSession(token, userData);
+            setSession(token, userData, refreshToken, false);
             navigate("/dashboard");
         } catch (err) {
             alert("Login incorrecto");

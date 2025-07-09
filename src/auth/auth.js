@@ -1,10 +1,25 @@
-export function setSession(token, userData){
-    localStorage.setItem("token", token);
+export function setSession(token, userData, refreshToken, stayLoggedIn){
+    if(stayLoggedIn){
+        localStorage.setItem("token", token);
+        localStorage.setItem("refreshToken", refreshToken);
+    }else{
+        sessionStorage.setItem("token", token);
+        sessionStorage.setItem("refreshToken", refreshToken);
+    }
     localStorage.setItem("user", JSON.stringify(userData));
 }
 
+export function getRefreshToken(){
+    return(
+        localStorage.getItem("refreshToken") ||
+        sessionStorage.getItem("refreshToken")
+    );
+}
+
 export function getToken(){
-    return localStorage.getItem("token");
+    return (localStorage.getItem("token") ||
+        sessionStorage.getItem("refreshToken")
+    );
 }
 
 export function getUser(){
@@ -14,6 +29,9 @@ export function getUser(){
 
 export function removeSession(){
     localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("refreshToken");
     localStorage.removeItem("user");
 }
 
