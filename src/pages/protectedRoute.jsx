@@ -24,7 +24,7 @@ const ProtectedRoute = ({ children }) => {
 
             try {
                 const decoded = jwtDecode(token);
-                const now = Date.now / 1000;
+                const now = Date.now() / 1000;
 
                 if(decoded.exp < now){
                     const newToken = await refreshAccessToken();
@@ -41,6 +41,8 @@ const ProtectedRoute = ({ children }) => {
                 setIsAuthenticated(false);
             }
             setLoading(false);
+
+
         };
 
         verifyToken();

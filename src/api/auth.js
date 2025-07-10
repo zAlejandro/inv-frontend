@@ -1,10 +1,10 @@
 import axios from "axios";
 import { getRefreshToken, getToken, getUser, removeSession, setSession } from "../auth/auth";
 
-const API = "https://inv-backend-vun0.onrender.com/api";
+const API = "http://localhost:4000/api";
 
-export function login(email, password){
-    return axios.post(`${API}/login`, {email, password});
+export function login(email, password, stayLoggedIn){
+    return axios.post(`${API}/login`, {email, password, stayLoggedIn});
 }
 
 export function mensaje(){
@@ -41,13 +41,21 @@ export async function refreshAccessToken() {
             refreshToken,
         });
 
-        const newToken = res.data.token;
+        const {newToken} = res.data.token;
 
-        setSession(newToken, refreshToken, getUser(), true);
+        const payload = JSON.parse(atob(newToken.split(".")[1]));
+
+        const userData = {
+            user_id: payload.user_id,
+            tenant_id: payload.tenant_id,
+            role: payload.role,
+            name: payload.name
+        };
+
+        setSession(newToken, userData, getUser(), true);
 
         return newToken;
     } catch (e) {
-        console.error("Error Refreshing Token: ", e);
         removeSession();
         return null;
     }

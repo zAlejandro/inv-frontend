@@ -18,7 +18,7 @@ export function getRefreshToken(){
 
 export function getToken(){
     return (localStorage.getItem("token") ||
-        sessionStorage.getItem("refreshToken")
+    sessionStorage.getItem("token")
     );
 }
 

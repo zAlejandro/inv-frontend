@@ -6,6 +6,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 export default function Login(){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [stayLoggedIn, setStayLoggedIn] = useState(false);
     const navigate = useNavigate();
 
     if(isLoggedIn()){
@@ -16,7 +17,8 @@ export default function Login(){
         e.preventDefault();
 
         try {
-            const res = await login(email, password);
+            const res = await login(email, password, stayLoggedIn);
+            console.log(res.data);
             const { token, refreshToken } = res.data;
 
             const payload = JSON.parse(atob(token.split(".")[1]));
@@ -28,7 +30,7 @@ export default function Login(){
                 name: payload.name
             };
 
-            setSession(token, userData, refreshToken, false);
+            setSession(token, userData, refreshToken, stayLoggedIn);
             navigate("/dashboard");
         } catch (err) {
             alert("Login incorrecto");
@@ -52,6 +54,13 @@ export default function Login(){
                 onChange={(e) => setPassword(e.target.value)}
                 required
             />
+            <div>
+                <p>Stay logged in?</p>
+                <input 
+                    type="checkbox"
+                    onChange={(e) => setStayLoggedIn(e.target.checked)}
+                />
+            </div>
             <button type="submit">Iniciar Sesión</button>
         </form>
     )
