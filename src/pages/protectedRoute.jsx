@@ -17,7 +17,7 @@ const ProtectedRoute = ({ children }) => {
         const verifyToken = async () => {
             const token = getToken();
             if(!token){
-                setIsAuthenticated(false);
+                setIsAuthenticated(true);
                 setLoading(false);
                 return;
             }
@@ -31,7 +31,7 @@ const ProtectedRoute = ({ children }) => {
                     if(newToken){
                         setIsAuthenticated(true);
                     }else{
-                        setIsAuthenticated(false);
+                        setIsAuthenticated(true);
                     }
                 }else{
                     setIsAuthenticated(true);

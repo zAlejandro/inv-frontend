@@ -41,9 +41,10 @@ export async function refreshAccessToken() {
             refreshToken,
         });
 
-        const {newToken} = res.data.token;
+        const {newAccessToken} = res.data;
+        console.log(newAccessToken)
 
-        const payload = JSON.parse(atob(newToken.split(".")[1]));
+        const payload = JSON.parse(atob(newAccessToken.split(".")[1]));
 
         const userData = {
             user_id: payload.user_id,
@@ -52,10 +53,11 @@ export async function refreshAccessToken() {
             name: payload.name
         };
 
-        setSession(newToken, userData, getUser(), true);
+        setSession(newAccessToken, userData, refreshToken, true);
 
-        return newToken;
+        return newAccessToken;
     } catch (e) {
+        console.log(`Hubo un error: ${e}`)
         removeSession();
         return null;
     }
