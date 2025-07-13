@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getRefreshToken, getToken, getUser, removeSession, setSession } from "../auth/auth";
 
-const API = "https://inv-backend-vun0.onrender.com/api";
+const API = "http://localhost:4000/api";
 
 export function login(email, password, stayLoggedIn){
     return axios.post(`${API}/login`, {email, password, stayLoggedIn});
