@@ -10,7 +10,8 @@ export default function Login(){
     const navigate = useNavigate();
 
     if(isLoggedIn()){
-        return <Navigate to="/dashboard" replace />;
+        const lastRoute = localStorage.getItem("lastRoute") || "/dashboard";
+        return <Navigate to={lastRoute} replace />;
     }
 
     async function handleSubmit(e) {

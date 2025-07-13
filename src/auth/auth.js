@@ -1,3 +1,6 @@
+import {useLocation} from "react-router-dom";
+import { useEffect } from "react";
+
 export function setSession(token, userData, refreshToken, stayLoggedIn){
     if(stayLoggedIn){
         localStorage.setItem("token", token);
@@ -37,4 +40,16 @@ export function removeSession(){
 
 export function isLoggedIn(){
     return !!getToken();
+}
+
+export function RouteTracker(){
+    const location = useLocation();
+
+    useEffect(() => {
+        if(location.pathname !== "/login"){
+            localStorage.setItem("lastRoute", location.pathname);
+        }
+    }, [location]);
+
+    return null;
 }
