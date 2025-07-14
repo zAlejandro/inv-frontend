@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/login";
 import Dashboard from "./pages/dashboard";
 import ProtectedRoute from "./pages/protectedRoute";
+import CrearProducto from "./pages/crearProducto";
 
 function App(){
   return(
@@ -17,6 +18,15 @@ function App(){
           }
         />
         <Route path="*" element={<Login/>}/>
+        <Route 
+          path="/productos" 
+          element=
+          {
+            <ProtectedRoute>
+              <CrearProducto/>
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
