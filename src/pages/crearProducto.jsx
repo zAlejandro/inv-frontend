@@ -1,5 +1,8 @@
 import React, {useEffect, useState} from "react";
 import { crearProductos, listCategories } from "../api/productos";
+import { RouteTracker } from "../auth/auth";
+import { Navigate } from "react-router-dom";
+import { isLoggedIn } from "../auth/auth";
 
 export default function CrearProducto(){
     const [formData, setFormData] = useState({
@@ -63,6 +66,11 @@ export default function CrearProducto(){
             setMensaje("Error al crear el producto");
         }
     };
+
+    RouteTracker();
+    if(!isLoggedIn()){
+        return <Navigate to="/login" replace />;
+    }
 
     return(
         <div style={{ maxWidth: "500px", margin: "2rem auto" }}>
