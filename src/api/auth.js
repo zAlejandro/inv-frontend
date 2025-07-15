@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getRefreshToken, getToken, getUser, removeSession, setSession } from "../auth/auth";
 
-const API = "https://inv-backend-vun0.onrender.com/api";
+const API = process.env.REACT_APP_API_URL;
 
 export function login(email, password, stayLoggedIn){
     return axios.post(`${API}/login`, {email, password, stayLoggedIn});
@@ -42,7 +42,6 @@ export async function refreshAccessToken() {
         });
 
         const {newAccessToken} = res.data;
-        console.log(newAccessToken)
 
         const payload = JSON.parse(atob(newAccessToken.split(".")[1]));
 
@@ -57,7 +56,6 @@ export async function refreshAccessToken() {
 
         return newAccessToken;
     } catch (e) {
-        console.log(`Hubo un error: ${e}`)
         removeSession();
         return null;
     }

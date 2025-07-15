@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { crearProductos, listCategories } from "../api/productos";
+import { crearProductos, listCategories, listarProductos } from "../api/productos";
 import { RouteTracker } from "../auth/auth";
 import { Navigate } from "react-router-dom";
 import { isLoggedIn } from "../auth/auth";
@@ -13,6 +13,25 @@ export default function CrearProducto(){
         category_id: "",
         stock: "",
     });
+
+    const [productos, setProductos] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const data = await listarProductos();
+                console.log(data);
+                setProductos(data);
+            } catch (e) {
+                console.error("Error al obtener productos", e);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
+    }, []);
 
     const [categories, setCategories] = useState([]);
     const [mensaje, setMensaje] = useState("");
@@ -36,7 +55,6 @@ export default function CrearProducto(){
             ...formData,
             [name]: value,
         });
-        console.log(value);
     };
 
     const handleSubmit = async (e) => {
@@ -49,7 +67,6 @@ export default function CrearProducto(){
                 stock: parseInt(formData.stock, 10),
                 category_id: formData.category_id,
             };
-            console.log(data);
             await crearProductos(data);
             setMensaje("Producto creado correctamente.");
 
@@ -62,7 +79,6 @@ export default function CrearProducto(){
                 stock: "",
             })
         } catch (err) {
-            console.error(err);
             setMensaje("Error al crear el producto");
         }
     };
@@ -71,6 +87,10 @@ export default function CrearProducto(){
     if(!isLoggedIn()){
         return <Navigate to="/login" replace />;
     }
+    
+    if(loading) return <p>Cargando Productos...</p>;
+
+    if(productos.length === 0) return <p>No hay productos registrados</p>
 
     return(
         <div style={{ maxWidth: "500px", margin: "2rem auto" }}>
@@ -140,6 +160,33 @@ export default function CrearProducto(){
 
                 <button type="submit">Guardar Producto</button>
             </form>
+                <div style={{ maxWidth: "800px", margin: "2rem auto" }}>
+                    <h2>Lista de Productos</h2>
+                    <table border="1" cellPadding="8" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
+                                <th>Categoría</th>
+                                <th>Barcode</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {productos.map((p) => (
+                                <tr key={p.id}>
+                                    <td>{p.name}</td>
+                                    <td>{p.description || "-"}</td>
+                                    <td>${p.price}</td>
+                                    <td>{p.stock}</td>
+                                    <td>{p.category_name || "Sin categoría"}</td>
+                                    <td>{p.barcode || "-"}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
         </div>
     );
 }

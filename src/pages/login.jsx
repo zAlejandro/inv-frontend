@@ -19,7 +19,6 @@ export default function Login(){
 
         try {
             const res = await login(email, password, stayLoggedIn);
-            console.log(res.data);
             const { token, refreshToken } = res.data;
 
             const payload = JSON.parse(atob(token.split(".")[1]));
