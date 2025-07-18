@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
 import { getToken, getUser, isLoggedIn, removeSession, RouteTracker } from "../auth/auth";
 import { useNavigate } from "react-router-dom";
+import MainLayout from "../layouts/mainLayout";
 
 export default function Dashboard(){
     const navigate = useNavigate();
@@ -8,6 +10,9 @@ export default function Dashboard(){
     const user = getUser();
 
     RouteTracker();
+    if(!isLoggedIn()){
+        return <Navigate to="/login" replace />;
+    }
 
     function logout(){
         removeSession();
@@ -16,9 +21,11 @@ export default function Dashboard(){
 
     return(
         <div>
-            <h1>Bienvenido</h1>
-            <h2>{user?.name || "usuario"}</h2>
-            <button onClick={logout}>Cerrar Sesión</button>
+            <MainLayout userName={user.name || "Usuario"}>
+            <div>
+                <h1>Bienvenido</h1>
+            </div>
+            </MainLayout>
         </div>
     )
 }
